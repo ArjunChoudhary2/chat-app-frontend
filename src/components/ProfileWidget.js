@@ -1,23 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import User from "../images/User.png";
 import { BiEdit } from "react-icons/bi";
+import ProfileEditPage from "../pages/ProfileEditPage";
+import ProfilePicture from "./ProfilePicture";
 
-const ProfileWidget = ({ user }) => {
-  const { username, moodStatus, profilePicture } = user;
+const ProfileWidget = ({ user, onUpdate }) => {
+  const { username, moodStatus } = user;
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
-    <div className=" h-[75px] bg-gray-950 text-center rounded-lg p-4 w-[99vw] flex justify-center mx-2 my-4">
-      <div className="flex justify-between text-white items-center">
-        <div className="w-[40px] bg-white rounded-full mr-4">
-          <img src={User} alt="avatar" className="w-full" />
+    <div className="bg-gray-950 text-white p-4 rounded-lg w-full">
+      {!isEditing ? (
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <ProfilePicture userId={user?.id}/>
+            <div>
+              <h2 className="text-lg font-semibold">Welcome, {username}!</h2>
+              <p className="text-sm">Status: {moodStatus}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsEditing(true)}
+            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-500 flex items-center"
+          >
+            <BiEdit className="mr-2" />
+            Edit Profile
+          </button>
         </div>
-        <div className=" font-semibold mx-4">
-          <h2>Welcome, {username}!</h2>
-          <p>Status: {moodStatus}</p>
-        </div>
-        <div>
-            <BiEdit className="text-white text-3xl hover:text-gray-400 cursor-pointer"/>
-        </div>
-      </div>
+      ) : (
+        <ProfileEditPage
+          user={user}
+          onCancel={() => setIsEditing(false)}
+        />
+      )}
     </div>
   );
 };

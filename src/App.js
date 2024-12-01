@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FirstTimeLoginModal from "./components/FirstTimeLoginModal";
 import ProfileWidget from "./components/ProfileWidget";
+import Search from "./components/Search";
 
 const App = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
@@ -20,13 +21,16 @@ const App = () => {
   // Handle the profile creation after the user enters the details
   const handleSaveProfile = async (userData) => {
     try {
-      const response = await fetch("https://localhost:7037/api/Users/createProfile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        "https://localhost:7037/api/Users/createProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create profile");
@@ -85,7 +89,10 @@ const App = () => {
       {userProfile && (
         <div className="user-profile relative">
           <ProfileWidget user={userProfile} />
-          
+          <div className="flex items-center justify-center p-4">
+            <Search currentUser={userProfile}/>
+          </div>
+
           {/* Logout Button */}
           <button
             onClick={handleLogout}
